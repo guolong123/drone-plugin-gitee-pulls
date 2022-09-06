@@ -16,6 +16,7 @@ var (
 	commentHeader            = "<!-- drone-plugin:gitee-pull-request -->"
 	commentBodyTemplateHttps = "|  drone-plugin/gitee-pulls ||\n|:---:|:---:|\n| **continuous-integration/drone/pr** — Build is **%s** [Details](%s) | [![Build status](%s)](%s) |"
 	commentBodyTemplateHttp  = "|  drone-plugin/gitee-pulls |\n|:---:|\n| :%s: **continuous-integration/drone/pr** — Build is **%s** [Details](%s) |"
+	commentBodyTemplateCIEnv  = "|  自动创建的CI环境：  [%s](%s) |"
 	runningIcon              = "clock1"
 	successIcon              = "white_check_mark"
 	failureIcon              = "x"
@@ -38,6 +39,7 @@ type commentPlugin struct {
 	buildStatus       config.BuildStatus
 	buildLink         string
 	isRunning         bool
+	ciAddr string
 }
 
 func NewCommentPlugin(config config.Config, client *provider.Client) CommentPlugin {
@@ -53,6 +55,7 @@ func NewCommentPlugin(config config.Config, client *provider.Client) CommentPlug
 		buildStatus:       config.BuildStatus,
 		buildLink:         config.BuildLink,
 		isRunning:         config.IsRunning,
+		ciAddr:            config.CiAddr,
 	}
 }
 
@@ -102,7 +105,8 @@ func (p *commentPlugin) buildCommentBody() string {
 		}
 		body = fmt.Sprintf(commentBodyTemplateHttp, icon, p.buildStatus, p.buildLink)
 	}
-	return commentHeader + "\n" + body
+	
+	return commentHeader + "\n" + body + "\n" + fmt.Sprintf(commentBodyTemplateCIEnv, p.ciAddr, p.ciAddr)
 }
 
 func (p *commentPlugin) buildBadgeLink() string {

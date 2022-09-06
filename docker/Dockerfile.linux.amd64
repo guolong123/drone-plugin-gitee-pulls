@@ -1,4 +1,4 @@
-FROM plugins/base:multiarch
+FROM alpine
 
 LABEL maintainer="kit101 <qkssk1711@163.com>" \
   org.label-schema.name="Drone Plugin Gitee Pulls" \
@@ -6,4 +6,7 @@ LABEL maintainer="kit101 <qkssk1711@163.com>" \
   org.label-schema.schema-version="1.0"
 
 ADD release/linux/amd64/drone-plugin-gitee-pulls /bin/
-ENTRYPOINT ["/bin/drone-plugin-gitee-pulls"]
+
+ADD release/linux/amd64/docker-entrypoint.sh /
+
+ENTRYPOINT ["sh", "/docker-entrypoint.sh"]

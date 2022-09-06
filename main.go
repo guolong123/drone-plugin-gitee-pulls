@@ -49,6 +49,11 @@ func main() {
 			EnvVar: "DRONE_SYSTEM_HOST",
 		},
 		cli.StringFlag{
+			Name:   "ci-addr",
+			Usage:  "ci env address",
+			EnvVar: "PLUGIN_CI_ADDRESS",
+		},
+		cli.StringFlag{
 			Name:   "proto",
 			Usage:  "drone server access proto: http/https",
 			EnvVar: "DRONE_SYSTEM_PROTO",
@@ -154,6 +159,8 @@ func run(c *cli.Context) error {
 
 	testDisabled := c.Bool("test")
 
+	ciAddr := c.String("ci-addr")
+
 	buildStatus := getBuildStatus(isRunning, droneBuildStatus)
 
 	conf := config.Config{
@@ -167,6 +174,7 @@ func run(c *cli.Context) error {
 		BuildStatus:       buildStatus,
 		CommitRef:         ref,
 		IsRunning:         isRunning,
+		CiAddr:            ciAddr,
 		PluginComment: config.Comment{
 			Disabled: commentDisabled,
 		},

@@ -20,6 +20,7 @@ type (
 		PluginComment Comment `json:"plugin_comment"`
 		PluginLabel   Label   `json:"plugin_label"`
 		PluginTest    Test    `json:"plugin_test"`
+		CiAddr        string  `json:"ci_addr"`
 	}
 	Comment struct {
 		Disabled bool `json:"disabled" default:"false"`
